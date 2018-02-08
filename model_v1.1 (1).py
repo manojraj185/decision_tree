@@ -85,7 +85,9 @@ def entropy(pred_dict, target_entropy):
         info_gain[col_name] = target_entropy - avg_entopy
         entropy_dict[col_name] = {avg_entopy}
     return info_gain, entropy_dict
-
+def read_test():
+    df = pd.read_csv("test.csv")
+    return df
 def read_csv():
 
     df1 = pd.read_csv("dt-data.csv")
@@ -93,6 +95,11 @@ def read_csv():
     df.columns = df.columns.str.replace('\W', '')
     df["Occupied"] = df["Occupied"].str.replace('[^a-zA-Z]', '')
     df["Enjoy"] = df["Enjoy"].str.replace('[^a-zA-Z]', '')
+    df["Price"] = df["Price"].str.replace('[^a-zA-Z]', '')
+    df["Music"] = df["Music"].str.replace('[^a-zA-Z]', '')
+    df["Location"] = df["Location"].str.strip()
+    df["VIP"] = df["VIP"].str.replace('[^a-zA-Z]', '')
+    #df["Favorite Beer"] = df["Favorite Beer"].str.strip('[^a-zA-Z]', '')
     #df["Enjoy"] = df["Enjoy"].apply(lambda x: str(x).replace(";", ""))
 
     return df
@@ -107,6 +114,16 @@ def print_tree(root):
         depth += 1
         print_tree([root[0].child[i]])
         depth -= 1
+def test_predict(root, df):
+    iter = root
+    while (iter.name != 'Yes') and (iter.name != 'No'):
+        col = iter.name
+        val = df[col]
+        if val[0] in iter.domain:
+            iter = iter.child[iter.domain.index(val[0])]
+        else :
+            return "Yes"
+    return iter.name
 
 def main():
     df = read_csv()
@@ -122,6 +139,9 @@ def main():
     #print "*****Printing the tree****"
     depth = 0
     print_tree([root])
+    dftest = read_test()
+    yes_no = test_predict(root,dftest)
+    print('\n**** The label for test data:'+ yes_no + '****\n',end='')
 
 def recursion(df, k, root):
     for i,domain in enumerate(df[k].value_counts().index.tolist()):
