@@ -1,4 +1,4 @@
-# Chetan KS
+# Chetan KS, Manoj Rajalbandi, Ajitesh Jayanth
 # Decision Tree
 from __future__ import print_function
 
@@ -138,10 +138,12 @@ def main():
     recursion(df, k, [root])
     #print "*****Printing the tree****"
     depth = 0
+    print("\n**** The Decision Tree ****\n", end='')
     print_tree([root])
+    print("\n**** End of decision tree ****\n", end='')
     dftest = read_test()
     yes_no = test_predict(root,dftest)
-    print('\n**** The label for test data:'+ yes_no + '****\n',end='')
+    print('\n\n\n**** The label for test data:'+ yes_no + '****\n\n',end='')
 
 def recursion(df, k, root):
     for i,domain in enumerate(df[k].value_counts().index.tolist()):
